@@ -9,4 +9,4 @@ def call(String k8sCredentialsID) {
     withCredentials([file(credentialsId: "${k8sCredentialsID}", variable: 'KUBECONFIG_FILE')]) {
         sh "sudo export KUBECONFIG=${KUBECONFIG_FILE} && kubectl apply -f ."
     }
-
+}
