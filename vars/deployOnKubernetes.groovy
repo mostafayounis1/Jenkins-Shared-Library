@@ -6,4 +6,3 @@ def call(String k8sCredentialsID) {
     }
 }
 
-
