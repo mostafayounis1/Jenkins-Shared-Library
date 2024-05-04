@@ -1,8 +1,12 @@
 #!/usr/bin/env groovy
 
+// KubernetesCredentialsID 'KubeConfig file'
 def call(String k8sCredentialsID) {
-    withCredentials([[$class: 'KubernetesCredentialsBinding', credentialsId: "${k8sCredentialsID}", variable: 'KUBECONFIG_FILE']]) {
-        sh "kubectl apply -f . --kubeconfig=${env.KUBECONFIG_FILE}"
+
+ sh "sed -i 's|image:.*|image: ${imageName}:${BUILD_NUMBER}|g' deployment.yaml"
+
+    // login to k8s Cluster via KubeConfig file
+    withCredentials([file(credentialsId: "${k8sCredentialsID}", variable: 'KUBECONFIG_FILE')]) {
+        sh "sudo export KUBECONFIG=${KUBECONFIG_FILE} && kubectl apply -f ."
     }
-}
 
