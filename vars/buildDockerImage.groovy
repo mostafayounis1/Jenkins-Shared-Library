@@ -1,8 +1,10 @@
-#!usr/bin/env groovy
-def call(String imageName) {
+#!/usr/bin/env groovy
 
-        // Build and push Docker image
-        echo "Building Docker image..."
-        sh "docker build -t ${imageName}:${BUILD_NUMBER} ."
- 
+// KubernetesCredentialsID 'KubeConfig file'
+def call(String k8sCredentialsID, String branchName) {
+
+    // login to k8s Cluster via KubeConfig file
+    withCredentials([file(credentialsId: "${k8sCredentialsID}", variable: 'KUBECONFIG_FILE')]) {
+        sh "export KUBECONFIG=${KUBECONFIG_FILE} && kubectl apply -f . --namespace=${branchName}"
+    }
 }
